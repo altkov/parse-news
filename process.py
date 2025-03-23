@@ -7,10 +7,12 @@ from tools.recording import Recording
 
 from config import ai_key
 from config import tg_token
+from config import ai_url
+from config import tg_chat_id
 
 connection = sqlite3.connect('news.db')
 
-ai = OpenAI(api_key=ai_key, base_url="https://api.aitunnel.ru/v1/")
+ai = OpenAI(api_key=ai_key, base_url=ai_url)
 
 recording = Recording(connection)
 news = recording.get_not_processed_news()
@@ -41,9 +43,9 @@ for item in news:
 
     if len(message) < 4096:
         if img != '' and len(message) < 1025:
-            bot.send_photo(1826968802, img, caption=message, parse_mode='MarkdownV2')
+            bot.send_photo(tg_chat_id, img, caption=message, parse_mode='MarkdownV2')
         else:
-            bot.send_message(1826968802, message, parse_mode='MarkdownV2')
+            bot.send_message(tg_chat_id, message, parse_mode='MarkdownV2')
 
     recording.process(id)
 
